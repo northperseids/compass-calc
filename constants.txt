@@ -1,0 +1,4 @@
+Earth Gravity: 9.807 m/s²
+Speed of light: 299,792,458 m/s
+Astronomical unit: 1AU = 1.495x10¹¹m
+1" = 2.54cm
