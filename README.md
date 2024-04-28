@@ -1,5 +1,5 @@
 # compass-calc
-Simple notepad calculator that allows in-line note-taking with simultaneous calculation.
+Simple notepad calculator that allows in-line note-taking with simultaneous calculation. (Requires wxPython.)
 
 ![Image showing two embedded proxies in conversation](/screenshots/image1.png)<br>
 ![Image showing constants window](/screenshots/image2.png)<br><br>
