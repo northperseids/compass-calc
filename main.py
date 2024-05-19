@@ -1,5 +1,6 @@
 import wx
 import re
+import functools
 
 pathToConstants = 'constants.txt'
 result = None
@@ -16,6 +17,7 @@ def convert(string):
         if num != "":
 
             calcString = float(num)
+            
             if arr[1] == "inch" or arr[1] == "\"":
                 if arr[-1] == "mm":
                     return round(calcString * 25.4, 4)
@@ -63,6 +65,102 @@ def convert(string):
     else:
         return None
 
+def calculate(expression):
+    def unstring(string):
+        try:
+            return float(string)
+        except ValueError:
+            return None
+
+    def expsplit(exp, op):
+        result = []
+        braces = 0
+        currentChunk = ""
+        for i in range(len(exp)):
+            current = exp[i]
+            if current == '(':
+                braces += 1
+            elif current == ')':
+                braces -= 1
+            if braces == 0 and op == current:
+                result.append(currentChunk)
+                currentChunk = ""
+            else:
+                currentChunk = currentChunk + current
+        if currentChunk != "":
+            result.append(currentChunk)
+        return result
+
+    def exp_separated(exp):
+        number_str = expsplit(exp, '^')
+        numbers = []
+        for each in number_str:
+            if each[0] == '(':
+                if each[-1] == ')':
+                    subexp = each[1:-1]
+                    numbers.append(plus_separated(subexp))
+                else:
+                    return None
+            else:
+                numbers.append(unstring(each))
+        try:
+            result = functools.reduce(lambda x, y: x**y, numbers)
+            return result
+        except TypeError:
+            return None
+
+    def slash_separated(exp):
+        number_str = expsplit(exp, '/')
+        numbers = list(map(exp_separated, number_str))
+        try:
+            result = functools.reduce(lambda x, y: x/y, numbers)
+            return result
+        except TypeError:
+            return None
+
+    def mult_separated(exp):
+        number_str = expsplit(exp, '*')
+        numbers = list(map(slash_separated, number_str))
+        try:
+            result = functools.reduce(lambda x, y: x*y, numbers)
+            return result
+        except TypeError:
+            return None
+
+    def minus_separated(exp):
+        number_str = expsplit(exp, '-')
+        numbers = list(map(mult_separated, number_str))
+        try:
+            result = functools.reduce(lambda x, y: x-y, numbers)
+            return result
+        except TypeError:
+            return None
+
+    def plus_separated(exp):
+        number_str = expsplit(exp, '+')
+        numbers = list(map(minus_separated, number_str))
+        try:
+            result = functools.reduce(lambda x, y: x+y, numbers)
+            return result
+        except TypeError:
+            return None
+
+    def format(exp):
+        nowhitespaces = exp.replace(' ', '')
+        try:
+            if nowhitespaces[0] in ['+', '-']:
+                nowhitespaces = '0' + nowhitespaces
+            answer = plus_separated(nowhitespaces)
+            if answer == None:
+                return None
+            else:
+                res = f'{answer:g}'
+                return res
+        except IndexError:
+            return ""
+    
+    return format(expression)
+
 class Window(wx.Frame):
     def __init__(self, title):
         super().__init__(parent = None, title = title, style=wx.SYSTEM_MENU|wx.CLOSE_BOX)
@@ -100,18 +198,16 @@ class Window(wx.Frame):
                 result = convert(line)
                 if result == None:
                     num = re.sub(r'[A-Za-z!\'\"]\s*', '', line)
-                    if len(line) == 1:
+                    if num == '(' or num == '()' or num == ')':
+                        pass
+                    elif len(line) == 1:
                         final.append(num)
                     elif len(line) > 1 and line[-1] not in ('+', '-', '/', '*', '^','('):
-                        try:
-                            modified = num.replace('^', '**')
-                            resulttotal = eval(str(modified))
-                            result = round(resulttotal, 4)
-                            final.append(str(result))
-                        except SyntaxError:
-                            final.append("")
-                        except:
-                            print('Error!')
+                        answer = calculate(num)
+                        if answer == None:
+                            final.append('Error!')
+                        else:
+                            final.append(answer)
                 else:
                     final.append(str(result))
             if each[0] == "\n":
