@@ -15,9 +15,9 @@ Current supported conversions:
 - feet -> inches, mm, cm
 - meter -> inches, mm, ft
 
-This is still a work in progress - currently it uses a stripped-down "eval()" (I know, I know, that's bad) to evaluate expressions.
+This is still a work in progress.
 
 ### Future plans/current issues
-- Change eval() to an actual parser
+- Change eval() to an actual parser - DONE, simple math parser added
 - Won't automatically multiply something next to parentheses (i.e. 2(4) will not come out as 2*4=8)
 - Expand on conversions
