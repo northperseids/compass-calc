@@ -7,7 +7,7 @@ result = None
 
 def convert(string):
     sections = string.split(' ')
-    if sections[0] == "convert":
+    if sections[0] == "convert" or sections[0] == "cc":
         arr = []
         for section in sections:
             letters = re.sub(r'[1-9.]', '', section)
@@ -16,52 +16,62 @@ def convert(string):
 
         if num != "":
 
-            calcString = float(num)
+            num_to_convert = float(num)
             
             if arr[1] == "inch" or arr[1] == "\"":
                 if arr[-1] == "mm":
-                    return round(calcString * 25.4, 4)
+                    return round(num_to_convert * 25.4, 4)
                 elif arr[-1] == "cm":
-                    return round(calcString * 2.54, 4)
+                    return round(num_to_convert * 2.54, 4)
                 elif arr[-1] == "feet" or arr[-1] == "ft":
-                    return round(calcString / 12, 4)
+                    return round(num_to_convert / 12, 4)
                 elif arr[-1] == "yards":
-                    return round(calcString / 36, 4)
+                    return round(num_to_convert / 36, 4)
+                
+            if arr[1] == "mile" or arr[1] == "mi" or arr[1] == "miles":
+                if arr[-1] == "km" or arr[-1] == "kilometer":
+                    return round(num_to_convert * 1.609, 4)
+            
+            if arr[1] == "km" or arr[1] == "kilometer" or arr[1] == "kilometers":
+                if arr[-1] == "mi" or arr[-1] == "miles" or arr[-1] == "mile":
+                    return round(num_to_convert / 1.609, 4)
                 
             if arr[1] == "mm":
                 if arr[-1] == "inches" or arr[-1] == "inch":
-                    return round(calcString / 25.4, 4)
+                    return round(num_to_convert / 25.4, 4)
                 elif arr[-1] == "cm":
-                    return round(calcString * 10, 4)
+                    return round(num_to_convert * 10, 4)
                 elif arr[-1] == "feet":
-                    return round(calcString / 304.8, 4)
+                    return round(num_to_convert / 304.8, 4)
                 
             if arr[1] == "cm":
                 if arr[-1] == "inches" or arr[-1] == "inch":
-                    return round(calcString / 2.54, 4)
+                    return round(num_to_convert / 2.54, 4)
                 elif arr[-1] == "mm":
-                    return round(calcString / 10, 4)
+                    return round(num_to_convert / 10, 4)
                 elif arr[-1] == "feet":
-                    return round(calcString / 30.48, 4)
+                    return round(num_to_convert / 30.48, 4)
                 
             if arr[1] == "feet" or arr[1] == "ft" or arr[1] == "\'" or arr[1] == "foot":
                 if arr[-1] == "inches" or arr[-1] == "inch":
-                    return round(calcString / 12, 4)
+                    return round(num_to_convert / 12, 4)
                 elif arr[-1] == "mm":
-                    return round(calcString * 304.8, 4)
+                    return round(num_to_convert * 304.8, 4)
                 elif arr[-1] == "cm":
-                    return round(calcString * 30.48, 4)
+                    return round(num_to_convert * 30.48, 4)
                 
             if arr[1] == "meter" or arr[1] == "meters" or arr[1] == "m":
                 if arr[-1] == "inches" or arr[-1] == "inch":
-                    return round(calcString * 39.37, 4)
+                    return round(num_to_convert * 39.37, 4)
                 elif arr[-1] == "mm":
-                    return round(calcString * 1000, 4)
+                    return round(num_to_convert * 1000, 4)
                 elif arr[-1] == "feet":
-                    return round(calcString * 3.281, 4)
+                    return round(num_to_convert * 3.281, 4)
+                elif arr[-1] == "cm":
+                    return round(num_to_convert * 100, 4)
         else:
-            calcString = ''
-            return calcString
+            num_to_convert = ''
+            return num_to_convert
     else:
         return None
 
