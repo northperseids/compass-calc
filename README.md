@@ -18,7 +18,8 @@ Current supported conversions:
 This is still a work in progress.
 
 ### Future plans/current issues
-- ~~Change eval() to an actual parser~~ - DONE, simple math parser added
+- ~~Change eval() to an actual parser~~ - DONE, simple math parser added, still being updated
+  - Make it able to handle negative numbers more easily in expressions!! (currently it does not like when there's two operators, i.e. 2*-1 does not come out as -2)
 - Fix that it won't automatically multiply something next to parentheses (i.e. 2(4) will not come out as 2*4=8)
 - Expand on conversions
 - Add basic trig functions
