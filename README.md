@@ -1,6 +1,8 @@
 # compass-calc
 Simple notepad calculator that allows in-line note-taking with simultaneous calculation.
 
+### NOTE: UNFINISHED, THIS VERSION MAY STILL CALCULATE COMPLEX EXPRESSIONS INCORRECTLY
+
 ![Image showing calculation window with various examples](/screenshots/image1.png)<br>
 ![Image showing constants window](/screenshots/image2.png)<br><br>
 
